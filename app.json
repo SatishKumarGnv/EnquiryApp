@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "GNVTrendz",
+    "slug": "GNVTrendz",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "android": {
+      "package": "com.GNVTrendz.GNV",
+      "versionCode": 1,
+      "icon": "./assets/GNV.png",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyC5GoPjAgkxDVvvlGQpXVucrn7zn4Vfq-U"
+        }
+      }
+    },
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "description": ""
+  }
+}
