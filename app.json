@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "GNVTrendz",
-    "slug": "GNVTrendz",
+    "name": "EnqApp",
+    "slug": "EnqApp",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "android": {
-      "package": "com.GNVTrendz.GNV",
+      "package": "com.EnqApp.GNV",
       "versionCode": 1,
-      "icon": "./assets/GNV.png",
+      "icon": "./assets/placeholder31.png",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyC5GoPjAgkxDVvvlGQpXVucrn7zn4Vfq-U"
@@ -21,9 +21,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/placeholder31.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/placeholder.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

@@ -33,8 +33,7 @@ const styles = StyleSheet.create({
     height:screen.height,
     borderWidth: 0.5,
     maxHeight:1000,
-    backgroundColor: '#54AFDD',
-    padding: 10,
+    backgroundColor: '#54AFDD', 
     bottom:0, 
      
   },

@@ -1,65 +1,124 @@
 //This is an example code for NavigationDrawer//
 import React, { Component } from 'react';
 //import react in our code.
-import { View, Image, TouchableOpacity } from 'react-native';
-// import all basic components
+import { View, Image,Alert, Platform,TouchableOpacity,TouchableWithoutFeedback, TouchableNativeFeedback,TouchableHighlight,StyleSheet, Modal,Text, Button, Dimensions } from 'react-native';
  
-//For React Navigation 3+
-//import {
-//  createStackNavigator,
-//  createDrawerNavigator,
-//  createAppContainer,
-//} from 'react-navigation';
- 
-//For React Navigation 4+
 import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import {createStackNavigator} from 'react-navigation-stack';
-import Screen1 from '../components/CurrentLocation';
-import Screen2 from '../components/FoodDashboard';
-import Screen3 from '../components/react-native-cluster';
-import Header from '../components/Header';
-import Login from '../components/Login'; 
-import Dashboard from '../components/Dashboard'; 
-import MenuDashboard from '../components/MenuDashboard'; 
-import Article from '../components/Article'; 
-import Square from '../components/Square'; 
-import List from '../components/List';  
-import Slider from '../components/slider'; 
-import Nmap from "../components/Nativemap";
-import Animatedmap from "../components/Animatedmap";
-import AnimatedNav from "../components/AnimatedNav";
-import Clusternativemarkers from "../components/react-native-cluster"; 
-import FoodDashboard from "../components/FoodDashboard"; 
-import CurrentLocation from "../components/CurrentLocation"; 
-import CustomMenuDashboard from "../components/CustomMenu"; 
+import {createStackNavigator} from 'react-navigation-stack'; 
+import { Icon } from "react-native-elements";
+import Login from '../components/Login';  
+import Register from '../components/Register';
+import AboutUs from '../components/AboutUs'; 
+import ContactUs from '../components/ContactUs'; 
+import CurrentLoc from '../components/CurrentLocation'; 
+// import ClusterSearch from '../components/ClusterSearch';
+import ClusterSearch from '../components/MapSearch'; 
+// import FAQ from '../components/Faq'; 
+import FAQ from '../components/FaqNew'; 
+import FoodDashboard from "../components/FoodDashboard";  
+import CustomSideMenu from "../components/CustomSideMenu";  
+ const screenwidth = Dimensions.get('window').width;
+ const screenheight = Dimensions.get('window').height;
+ let HeaderRightBind= ''; 
+ const headerstyleconst = {
+                            backgroundColor: '#FFFFFF',
+                            height:23,   
+                            textAlign: 'center', 
+                            marginTop:Platform.OS == 'android'? 0 :14 
+                          };
  
+                          
 class NavigationDrawerStructure extends Component {
 
     constructor(props) {
         super(props); 
         this.toggleDrawer= this.toggleDrawer.bind(this);
+        this.Logout= this.Logout.bind(this);
+        this.OpenModal= this.OpenModal.bind(this);
+        this.state = {
+          isModalVisible:false,
+          isLogin:false,
+        };
       }
   //Structure for the navigatin Drawer
   toggleDrawer = () => {
     //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
   };
+
+  Logout = () => { 
+    this.setState({ isModalVisible: false }); 
+    let oHome = new Login(); 
+    oHome.onLogout();
+    this.props.navigationProps.navigate('Login'); 
+  };
+
+  OpenModal = () => {
+    Alert.alert(
+      'Confirm',
+      'Are you sure that you want to logout?',
+      [
+        {text: 'Yes', onPress: this.Logout},
+        {text: 'NO', onPress: () => console.warn('NO Pressed'), style: 'cancel'},
+      ]
+    );
+  }
+ 
+
   render() {
+    const stat = this.props.onLogout;
     return (
-      <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+      <View style={{flex: 1,width: 50, height: 50}}>
+      <View style={styles.MenuLeft}>
+      <View>     
+         <TouchableHighlight  onPress={this.toggleDrawer.bind(this)}>
           {/*Donute Button Image */}
           <Image
-            source={require('../assets/drawer.png')}
-            style={{ width: 25, height: 25, marginLeft: 5 }}
+            source={require('../assets/drawer.png')} accessibilityLabel = 'Menu'
+            style={{ width: 25, height: 25, marginLeft: 5,marginTop:10 }}
           />
-        </TouchableOpacity>
+        </TouchableHighlight>
+       </View>
+        
+      </View>
       </View>
     );
   }
 }
- 
+const headertitlestyl = (
+  <View  style={{flex:1, flexDirection:'row', justifyContent:'center'}}>
+    <Image
+    source={require('../assets/placeholder3.png')} 
+        style={{width:25, height:23,bottom:5}}
+    />
+   </View>
+);
+   HeaderRightBind = (
+    <TouchableWithoutFeedback onPress={() => 
+      {    
+       Alert.alert(
+         'Do you want to Logout!',
+         'Alert Message',
+         [
+           {text: 'Yes', onPress: () => {  
+             let oHome = new Login(); 
+             oHome.onLogout();
+                navigation.navigate('Login')
+               }},
+           {text: 'No', onPress: () => console.log('Cancel Pressed!')},
+         ],
+         { cancelable: false }
+       ) 
+     }
+      }
+         > 
+         <Image
+         source={require('../assets/logout.png')}
+         style={{ width: 25, height: 25 ,marginTop:10 }}
+       />
+     </TouchableWithoutFeedback>
+);
 const FirstActivity_StackNavigator = createStackNavigator({
   //All the screen from the Screen1 will be indexed here
   Login: {
@@ -69,7 +128,29 @@ const FirstActivity_StackNavigator = createStackNavigator({
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#FF9800',
-      },
+        
+      }, 
+      headerTintColor: '#fff',
+    }),
+  },
+},
+{
+    headerMode:"none"
+}
+
+);
+
+const FirstActivity_StackNavigator_Register = createStackNavigator({
+  //All the screen from the Screen1 will be indexed here
+  Register: {
+    screen: Register,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Login',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#FF9800',
+        
+      }, 
       headerTintColor: '#fff',
     }),
   },
@@ -84,13 +165,57 @@ const Screen2_StackNavigator = createStackNavigator({
   //All the screen from the Screen2 will be indexed here
   Second: {
     screen: FoodDashboard,
+    headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
+      
       title: 'FoodDashboard',
+      headerMode: 'float',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#FF9800',
+      headerRight: (
+        <View style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          width: 20,
+          marginRight:4
+        }}>
+        <TouchableWithoutFeedback  onPress={() => 
+        {    
+         Alert.alert(
+           'Do you want to Logout!',
+           'Alert Message',
+           [
+             {text: 'Yes', onPress: () => {  
+               let oHome = new Login(); 
+               oHome.onLogout();
+                  navigation.navigate('Login')
+                 }},
+             {text: 'No', onPress: () => console.log('Cancel Pressed!')},
+           ],
+           { cancelable: false }
+         ) 
+       }
+        }
+           > 
+           <Image
+           source={require('../assets/logout.png')}
+           style={styles.Logoalin}
+         />
+       </TouchableWithoutFeedback>
+       <TouchableHighlight  
+           > 
+           <Image
+           source={require('../assets/Notification.png')}
+           style={styles.Notifications}
+         />
+       </TouchableHighlight>
+       </View>
+       ),
+      headerStyle: headerstyleconst,
+      headerTintColor: '#000000', 
+      headerTitle: headertitlestyl,
+      headerTitleStyle: {
+        fontWeight: 'bold'
       },
-      headerTintColor: '#fff',
     }),
   },
 });
@@ -98,17 +223,268 @@ const Screen2_StackNavigator = createStackNavigator({
 const Screen3_StackNavigator = createStackNavigator({
   //All the screen from the Screen3 will be indexed here
   Third: {
-    screen: MenuDashboard,
+    screen: AboutUs,
+    headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
-      title: 'Menu Links',
+      title: 'About Us',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#FF9800',
-      },
-      headerTintColor: '#fff',
+      headerRight: (
+        <View style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          width: 20,
+          marginRight:4
+        }}>
+        <TouchableWithoutFeedback  onPress={() => 
+        {    
+         Alert.alert(
+           'Do you want to Logout!',
+           'Alert Message',
+           [
+             {text: 'Yes', onPress: () => {  
+               let oHome = new Login(); 
+               oHome.onLogout();
+                  navigation.navigate('Login')
+                 }},
+             {text: 'No', onPress: () => console.log('Cancel Pressed!')},
+           ],
+           { cancelable: false }
+         ) 
+       }
+        }
+           > 
+           <Image
+           source={require('../assets/logout.png')}
+           style={styles.Logoalin}
+         />
+       </TouchableWithoutFeedback>
+       <TouchableHighlight  
+           > 
+           <Image
+           source={require('../assets/Notification.png')}
+           style={styles.Notifications}
+         />
+       </TouchableHighlight>
+       </View>
+       ),
+      headerStyle: headerstyleconst,
+      headerTintColor: '#000000', 
+      headerTitle: headertitlestyl,
     }),
   },
 });
+
+const Screen4_StackNavigator = createStackNavigator({
+  //All the screen from the Screen3 will be indexed here
+  Four: {
+    screen: ContactUs,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Contact Us',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight:(
+        <View style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          width: 20,
+          marginRight:4
+        }}>
+        <TouchableWithoutFeedback  onPress={() => 
+        {    
+         Alert.alert(
+           'Do you want to Logout!',
+           'Alert Message',
+           [
+             {text: 'Yes', onPress: () => {  
+               let oHome = new Login(); 
+               oHome.onLogout();
+                  navigation.navigate('Login')
+                 }},
+             {text: 'No', onPress: () => console.log('Cancel Pressed!')},
+           ],
+           { cancelable: false }
+         ) 
+       }
+        }
+           > 
+           <Image
+           source={require('../assets/logout.png')}
+           style={styles.Logoalin}
+         />
+       </TouchableWithoutFeedback>
+       <TouchableHighlight  
+           > 
+           <Image
+           source={require('../assets/Notification.png')}
+           style={styles.Notifications}
+         />
+       </TouchableHighlight>
+       </View>
+       ),
+      headerStyle: headerstyleconst,
+      headerTintColor: '#000000', 
+      headerTitle: headertitlestyl,
+    }),
+  },
+});
+
+const Screen5_StackNavigator = createStackNavigator({
+  //All the screen from the Screen3 will be indexed here
+  Five: {
+    screen: FAQ,
+    navigationOptions: ({ navigation }) => ({
+      title: 'FAQ',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight:(
+        <View style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          width: 20,
+          marginRight:4
+        }}>
+        <TouchableWithoutFeedback  onPress={() => 
+        {    
+         Alert.alert(
+           'Do you want to Logout!',
+           'Alert Message',
+           [
+             {text: 'Yes', onPress: () => {  
+               let oHome = new Login(); 
+               oHome.onLogout();
+                  navigation.navigate('Login')
+                 }},
+             {text: 'No', onPress: () => console.log('Cancel Pressed!')},
+           ],
+           { cancelable: false }
+         ) 
+       }
+        }
+           > 
+           <Image
+           source={require('../assets/logout.png')}
+           style={styles.Logoalin}
+         />
+       </TouchableWithoutFeedback>
+       <TouchableHighlight  
+           > 
+           <Image
+           source={require('../assets/Notification.png')}
+           style={styles.Notifications}
+         />
+       </TouchableHighlight>
+       </View>
+       ),
+      headerStyle: headerstyleconst,
+      headerTintColor: '#000000', 
+      headerTitle: headertitlestyl,
+    }),
+  },
+});
+
+const Screen6_StackNavigator = createStackNavigator({
+  //All the screen from the Screen3 will be indexed here
+  Six: {
+    screen: ClusterSearch,
+    navigationOptions: ({ navigation }) => ({
+      title: 'ClusterSearch',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight:(
+        <View style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          width: 20,
+          marginRight:4
+        }}>
+        <TouchableWithoutFeedback  onPress={() => 
+        {    
+         Alert.alert(
+           'Do you want to Logout!',
+           'Alert Message',
+           [
+             {text: 'Yes', onPress: () => {  
+               let oHome = new Login(); 
+               oHome.onLogout();
+                  navigation.navigate('Login')
+                 }},
+             {text: 'No', onPress: () => console.log('Cancel Pressed!')},
+           ],
+           { cancelable: false }
+         ) 
+       }
+        }
+           > 
+           <Image
+           source={require('../assets/logout.png')}
+           style={styles.Logoalin}
+         />
+       </TouchableWithoutFeedback>
+       <TouchableHighlight  
+           > 
+           <Image
+           source={require('../assets/Notification.png')}
+           style={styles.Notifications}
+         />
+       </TouchableHighlight>
+       </View>
+       ),
+      headerStyle: headerstyleconst,
+      headerTintColor: '#000000', 
+      headerTitle: headertitlestyl,
+    }),
+  },
+});
+
+const Screen7_StackNavigator = createStackNavigator({
+  //All the screen from the Screen3 will be indexed here
+  Seven: {
+    screen: FAQ,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Menu Links',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: (
+        <View style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          width: 20,
+          marginRight:4
+        }}>
+        <TouchableWithoutFeedback  onPress={() => 
+        {    
+         Alert.alert(
+           'Do you want to Logout!',
+           'Alert Message',
+           [
+             {text: 'Yes', onPress: () => {  
+               let oHome = new Login(); 
+               oHome.onLogout();
+                  navigation.navigate('Login')
+                 }},
+             {text: 'No', onPress: () => console.log('Cancel Pressed!')},
+           ],
+           { cancelable: false }
+         ) 
+       }
+        }
+           > 
+           <Image
+           source={require('../assets/logout.png')}
+           style={styles.Logoalin}
+         />
+       </TouchableWithoutFeedback>
+       <TouchableHighlight  
+           > 
+           <Image
+           source={require('../assets/Notification.png')}
+           style={styles.Notifications}
+         />
+       </TouchableHighlight>
+       </View>
+       ),
+       headerTintColor: '#000000', 
+       headerTitle: headertitlestyl,
+    }),
+  },
+});
+
  
 const DrawerNavigatorExample = createDrawerNavigator(
     {
@@ -122,25 +498,111 @@ const DrawerNavigatorExample = createDrawerNavigator(
     //   header:null
     },
   },
+  Register: {
+    //Title
+    screen: FirstActivity_StackNavigator_Register,
+    navigationOptions: {
+    //   drawerLabel: 'Login',
+    drawerLabel: () => null
+    //   header:null
+    },
+  },
   FoodDashboard: {
     //Title
     screen: Screen2_StackNavigator,
+    headerMode: 'float',
     navigationOptions: {
       drawerLabel: 'Dashboard',
+      headerStyle: {marginBottom:30}
     },
   },
-  MenuDashboard: {
+  AboutUs: {
+    //Title
+    screen: Screen3_StackNavigator,
+    headerMode: 'float',
+    navigationOptions: {
+      drawerLabel: 'About Us',
+    },
+  },
+  ContactUs: {
+    //Title
+    screen: Screen4_StackNavigator,
+    headerMode: 'float',
+    navigationOptions: {
+      drawerLabel: 'Contact Us',
+    },
+  },
+  FAQ: {
+    //Title
+    screen: Screen5_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'FAQ',
+    },
+  },
+  ClusterSearch: {
+    //Title
+    screen: Screen6_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Current Location',
+    },
+  },
+  Logout: {
+    //Title
+    screen: Screen7_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Logout',
+    },
+  },
+  Loggout: {
     //Title
     screen: Screen3_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'MenuDashboard',
+      drawerLabel: 'Loggout',
     },
   },
 },
 {
     initialRouteName: "Login",
-    header:null
+    header:null,
+     contentComponent: CustomSideMenu 
 }
 );
- 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center', 
+    marginTop:30
+  },
+   modal: {
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: '#00ff00',
+      padding: 10, 
+      marginTop:screenwidth/2,
+      marginBottom:screenheight/2,
+      marginLeft:25,
+      marginRight:25
+   },
+   text: {
+      color: '#3f2949',
+      marginTop: 10
+   },
+   LogoutRight:{ 
+   },
+   MenuLeft:{ 
+   },
+   Logoalin:{
+    width: 25, 
+    height: 25,
+    left:5,
+    bottom:3
+   },
+   Notifications:{
+    width: 25, 
+    height: 25, 
+    right:43,
+    bottom:3
+   }
+});
 export default createAppContainer(DrawerNavigatorExample);
